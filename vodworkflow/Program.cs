@@ -14,26 +14,27 @@ namespace vodworkflow
         private static readonly string MediaFiles = @"Media\BigBuckBunny.mp4";
 
         // Read values from the App.config file.
-        static string _AADTenantDomain = ConfigurationManager.AppSettings["AMSAADTenantDomain"];
-        static string _RESTAPIEndpoint = ConfigurationManager.AppSettings["AMSRESTAPIEndpoint"];
-        static string _ClientID = ConfigurationManager.AppSettings["clientid"];
-        static string _ClientSecret = ConfigurationManager.AppSettings["clientsecret"];
+        static string AADTenantDomain = ConfigurationManager.AppSettings["AMSAADTenantDomain"];
+        static string RESTAPIEndpoint = ConfigurationManager.AppSettings["AMSRESTAPIEndpoint"];
+        static string ClientID = ConfigurationManager.AppSettings["clientid"];
+        static string ClientSecret = ConfigurationManager.AppSettings["clientsecret"];
+        static string AzFunctionsHostBaseUrl = ConfigurationManager.AppSettings["AzFunctionsHostBaseUrl"];
 
         // Field for service context.
-        private static CloudMediaContext _context = null;
+        private static CloudMediaContext Context = null;
 
         static void Main(string[] args)
         {
             try
             {
                 AzureAdTokenCredentials tokenCredentials = new AzureAdTokenCredentials(
-                    _AADTenantDomain,
-                    new AzureAdClientSymmetricKey(_ClientID, _ClientSecret),
+                    AADTenantDomain,
+                    new AzureAdClientSymmetricKey(ClientID, ClientSecret),
                     AzureEnvironments.AzureCloudEnvironment);
 
                 AzureAdTokenProvider tokenProvider = new AzureAdTokenProvider(tokenCredentials);
 
-                _context = new CloudMediaContext(new Uri(_RESTAPIEndpoint), tokenProvider);
+                Context = new CloudMediaContext(new Uri(RESTAPIEndpoint), tokenProvider);
 
                 // If you want to secure your high quality input media files with strong encryption 
                 // at rest on disk, use AssetCreationOptions.StorageEncrypted instead of 
@@ -50,12 +51,12 @@ namespace vodworkflow
                 // Upload text file to asset name
 
                 // Check status of encode
-                CheckJobStatusResponse chkJob;
+                CheckJobStatusResponse checkJobStatusResponse;
 
                 do
                 {
-                    chkJob = CheckJobStatus(encJob.JobId);
-                } while (chkJob.IsRunning.Equals("true"));
+                    checkJobStatusResponse = CheckJobStatus(encJob.JobId);
+                } while (checkJobStatusResponse.IsRunning);
 
             }
             catch (Exception exception)
@@ -76,7 +77,7 @@ namespace vodworkflow
         {
             Console.WriteLine("Upload File: filename, options", fileName, OperationState.Succeeded);
 
-            IAsset inputAsset = _context.Assets.CreateFromFile(fileName, options, (af, p) =>
+            IAsset inputAsset = Context.Assets.CreateFromFile(fileName, options, (af, p) =>
             {
                 Console.WriteLine("Uploading '{0}' - Progress: {1:0.##}%", af.Name, p.Progress);
             });
@@ -113,7 +114,7 @@ namespace vodworkflow
 
         private static IMediaProcessor GetLatestMediaProcessorByName(string mediaProcessorName)
         {
-            var processor = _context.MediaProcessors.Where(p => p.Name == mediaProcessorName).
+            var processor = Context.MediaProcessors.Where(p => p.Name == mediaProcessorName).
             ToList().OrderBy(p => new Version(p.Version)).LastOrDefault();
 
             if (processor == null)
@@ -158,7 +159,6 @@ namespace vodworkflow
                 objHttpWebRequest.Method = "GET";
 
             }
-
 
             try
             {
