@@ -26,15 +26,14 @@ namespace vodworkflow
         {
             try
             {
-                AzureAdTokenCredentials tokenCredentials = new AzureAdTokenCredentials(_AADTenantDomain, new AzureAdClientSymmetricKey(_ClientID, _ClientSecret),
-                                                                AzureEnvironments.AzureCloudEnvironment);
+                AzureAdTokenCredentials tokenCredentials = new AzureAdTokenCredentials(
+                    _AADTenantDomain,
+                    new AzureAdClientSymmetricKey(_ClientID, _ClientSecret),
+                    AzureEnvironments.AzureCloudEnvironment);
 
                 AzureAdTokenProvider tokenProvider = new AzureAdTokenProvider(tokenCredentials);
 
                 _context = new CloudMediaContext(new Uri(_RESTAPIEndpoint), tokenProvider);
-
-                IMediaProcessor processor = GetLatestMediaProcessorByName("Media Encoder Standard");
-
 
                 // If you want to secure your high quality input media files with strong encryption at rest on disk,
                 // use AssetCreationOptions.StorageEncrypted instead of AssetCreationOptions.None.
