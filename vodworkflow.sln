@@ -1,11 +1,12 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27004.2009
+VisualStudioVersion = 15.0.27130.2003
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "vodworkflow", "vodworkflow\vodworkflow.csproj", "{197D4E9E-0F54-4AEF-A975-0255AD48C897}"
 EndProject
-
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "vodworkflow.tests", "vodworkflow.tests\vodworkflow.tests.csproj", "{C12848AE-8AF7-4EFA-B3EE-E9D1FD2034E1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -16,16 +17,16 @@ Global
 		{197D4E9E-0F54-4AEF-A975-0255AD48C897}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{197D4E9E-0F54-4AEF-A975-0255AD48C897}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{197D4E9E-0F54-4AEF-A975-0255AD48C897}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0F8E671E-56BF-477C-BC28-8AC2C2DD18E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0F8E671E-56BF-477C-BC28-8AC2C2DD18E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0F8E671E-56BF-477C-BC28-8AC2C2DD18E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0F8E671E-56BF-477C-BC28-8AC2C2DD18E9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C12848AE-8AF7-4EFA-B3EE-E9D1FD2034E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C12848AE-8AF7-4EFA-B3EE-E9D1FD2034E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C12848AE-8AF7-4EFA-B3EE-E9D1FD2034E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C12848AE-8AF7-4EFA-B3EE-E9D1FD2034E1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		EnterpriseLibraryConfigurationToolBinariesPath = packages\TransientFaultHandling.Core.5.1.1209.1\lib\NET4
 		SolutionGuid = {1124945B-CF38-44D5-B723-9D9E5840674A}
+		EnterpriseLibraryConfigurationToolBinariesPath = packages\TransientFaultHandling.Core.5.1.1209.1\lib\NET4
 	EndGlobalSection
 EndGlobal

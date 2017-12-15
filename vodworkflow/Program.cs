@@ -11,182 +11,6 @@ using System.Text;
 
 namespace vodworkflow
 {
-    public class EncodeJob
-    {
-        public string assetId { get; set; }
-        public string mesPreset { get; set; }
-        public EncodeJob(string AssetId, string MesPreset)
-        {
-            assetId = AssetId;
-            mesPreset = MesPreset;
-        }
-    }
-
-    public class mes
-    {
-        public string assetId { get; set; }
-        public string taskId { get; set; }
-        public mes(string AssetId, string TaskId)
-        {
-            assetId = AssetId;
-            taskId = TaskId;
-        }
-    }
-
-    public class mepw
-    {
-        public string assetId { get; set; }
-        public string taskId { get; set; }
-        public mepw(string AssetId, string TaskId)
-        {
-            assetId = AssetId;
-            taskId = TaskId;
-        }
-    }
-
-    public class indexV1
-    {
-        public string assetId { get; set; }
-        public string taskId { get; set; }
-        public string language { get; set; }
-        public indexV1(string AssetId, string TaskId, string Language)
-        {
-            assetId = AssetId;
-            taskId = TaskId;
-            language = Language;
-        }
-    }
-
-    public class indexV2
-    {
-        public string assetId { get; set; }
-        public string taskId { get; set; }
-        public string language { get; set; }
-        public indexV2(string AssetId, string TaskId, string Language)
-        {
-            assetId = AssetId;
-            taskId = TaskId;
-            language = Language;
-        }
-    }
-
-    public class ocr
-    {
-        public string assetId { get; set; }
-        public string taskId { get; set; }
-        public ocr(string AssetId, string TaskId)
-        {
-            assetId = AssetId;
-            taskId = TaskId;
-        }
-    }
-
-    public class faceDetection
-    {
-        public string assetId { get; set; }
-        public string taskId { get; set; }
-        public faceDetection(string AssetId, string TaskId)
-        {
-            assetId = AssetId;
-            taskId = TaskId;
-        }
-    }
-
-    public class faceRedaction
-    {
-        public string assetId { get; set; }
-        public string taskId { get; set; }
-        public faceRedaction(string AssetId, string TaskId)
-        {
-            assetId = AssetId;
-            taskId = TaskId;
-        }
-    }
-
-    public class motionDetection
-    {
-        public string assetId { get; set; }
-        public string taskId { get; set; }
-        public motionDetection(string AssetId, string TaskId)
-        {
-            assetId = AssetId;
-            taskId = TaskId;
-        }
-    }
-
-    public class summarization
-    {
-        public string assetId { get; set; }
-        public string taskId { get; set; }
-        public summarization(string AssetId, string TaskId)
-        {
-            assetId = AssetId;
-            taskId = TaskId;
-        }
-    }
-
-    public class hyperlapse
-    {
-        public string assetId { get; set; }
-        public string taskId { get; set; }
-        public hyperlapse(string AssetId, string TaskId)
-        {
-            assetId = AssetId;
-            taskId = TaskId;
-        }
-    }
-
-    public class EncodeJobResponse
-    {
-        public string id { get; set; }
-        public string jobId { get; set; }
-        public string otherJobsQueue { get; set; }
-        public mes Mes { get; set; }
-        public indexV1 IndexV1 { get; set; }
-        public indexV2 IndexV2 { get; set; }
-        public ocr Ocr { get; set; }
-        public faceDetection FaceDetection { get; set; }
-        public faceRedaction FaceRedaction { get; set; }
-        public motionDetection MotionDetection { get; set; }
-        public summarization Summarization { get; set; }
-        public hyperlapse Hyperlapse { get; set; }
-
-        public EncodeJobResponse() { }
-    }
-
-    public class CheckJob
-    {
-        string jobId { get; set; }
-        string extendedInfo { get; set; }
-        public CheckJob(string JobId, string ExtendedInfo)
-        {
-            jobId = JobId;
-            extendedInfo = ExtendedInfo;
-        }
-    }
-
-    public class extendedInfo
-    {
-        public string mediaUnitNumber { get; set; }
-        public string mediaUnitSize { get; set; }
-        public string otherJobsProcessing { get; set; }
-        public string otherJobsScheduled { get; set; }
-        public string otherJobsQueue { get; set; }
-        public string amsRESTAPIEndpoint { get; set; }
-    }
-
-    public class CheckJobResponse
-    {
-        public string jobState { get; set; }       // The state of the job (int)
-        public string isRunning { get; set; }      // True if job is running
-        public string isSuccessful { get; set; }   // True is job is a success. Only valid if IsRunning = False
-        public string errorText { get; set; }      // error(s) text if job state is error
-        public string startTime { get; set; }
-        public string endTime { get; set; }
-        public string runningDuration { get; set; }
-        public extendedInfo extinfo { get; set; }
-    }
-
     class Program
     {
         // Read values from the App.config file.
@@ -196,7 +20,6 @@ namespace vodworkflow
         static string _ClientSecret = ConfigurationManager.AppSettings["clientsecret"];
 
         private static readonly string _mediaFiles = "C:\\dev\\go\\src\\thumbnails\\video-nginx\\html\\video\\bigbuck.mp4";
-
 
         // Field for service context.
         private static CloudMediaContext _context = null;
@@ -230,11 +53,11 @@ namespace vodworkflow
                 // uplaod text file to asset name
 
                 // check status of encode
-                CheckJobResponse chkJob;
+                CheckJobStatusResponse chkJob;
                 do
                 {
-                    chkJob = CheckJobStatus(encJob.jobId);
-                } while (chkJob.isRunning.Equals("true"));
+                    chkJob = CheckJobStatus(encJob.JobId);
+                } while (chkJob.IsRunning.Equals("true"));
        
             }
             catch (Exception exception)
@@ -276,7 +99,7 @@ namespace vodworkflow
             // string url = "https://azmediafunctionsforlogicappwdahb73ofbb5k.azurewebsites.net/api/submit-job?code=J3mX1K4aWOMC6PXiTDkHY/BL1sxxgQy2IBJs0L9Vhs6Z158ucNjNpA==&clientId=default";
             string url = "http://192.168.1.16:3000/submitjob/1";
 
-            EncodeJob ejob = new EncodeJob(assetId, "Content Adaptive Multiple Bitrate MP4");
+            EncodeJobRequest ejob = new EncodeJobRequest() { AssetId = assetId, MesPreset = "Content Adaptive Multiple Bitrate MP4" };
             string json = JsonConvert.SerializeObject(ejob);
             HttpWebResponse response = MakeHttpRequest(url, json, "POST");
 
@@ -301,14 +124,14 @@ namespace vodworkflow
             return processor;
         }
 
-        public static CheckJobResponse CheckJobStatus(string jobid)
+        public static CheckJobStatusResponse CheckJobStatus(string jobid)
         {
-            CheckJob job = new CheckJob(jobid, "true");
+            CheckJobStatusRequest job = new CheckJobStatusRequest { JobId = jobid, ExtendedInfo = true };
             string url = "http://192.168.1.16:3000/submitjob/1";
 
             string json = JsonConvert.SerializeObject(job);
             HttpWebResponse response = MakeHttpRequest(url, json, "POST");
-            CheckJobResponse chkJob = ReadCheckJobResponse(response);
+            CheckJobStatusResponse chkJob = ReadCheckJobResponse(response);
 
             return chkJob;
 
@@ -374,12 +197,12 @@ namespace vodworkflow
             return encJob;
         }
 
-        public static CheckJobResponse ReadCheckJobResponse(HttpWebResponse httpResponse)
+        public static CheckJobStatusResponse ReadCheckJobResponse(HttpWebResponse httpResponse)
         {
             Stream stream = httpResponse.GetResponseStream();
             StreamReader reader = new StreamReader(stream);
             var result = reader.ReadToEnd();
-            CheckJobResponse chkJob = JsonConvert.DeserializeObject<CheckJobResponse>(result);
+            CheckJobStatusResponse chkJob = JsonConvert.DeserializeObject<CheckJobStatusResponse>(result);
             return chkJob;
         }
 

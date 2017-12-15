@@ -1,0 +1,46 @@
+﻿{
+  "jobId": "nb:jid:UUID:19cab2ff-0300-80c0-da01-f1e7d467f6f9",
+  "otherJobsQueue": 1,
+  "mes": {
+    "assetId": "nb:cid:UUID:7346ded3-fdb5-4e97-b508-4e20b054d0b4",
+    "taskId": "nb:tid:UUID:19cab2ff-0300-80c0-da02-f1e7d467f6f9"
+  },
+  "mepw": {
+    "assetId": null,
+    "taskId": null
+  },
+  "indexV1": {
+    "assetId": null,
+    "taskId": null,
+    "language": null
+  },
+  "indexV2": {
+    "assetId": "nb:cid:UUID:7205d19f-21da-4cb1-9dbb-47d251103d75",
+    "taskId": "nb:tid:UUID:19cab2ff-0300-80c0-da03-f1e7d467f6f9",
+    "language": "EnUs"
+  },
+  "ocr": {
+    "assetId": null,
+    "taskId": null
+  },
+  "faceDetection": {
+    "assetId": null,
+    "taskId": null
+  },
+  "faceRedaction": {
+    "assetId": null,
+    "taskId": null
+  },
+  "motionDetection": {
+    "assetId": null,
+    "taskId": null
+  },
+  "summarization": {
+    "assetId": null,
+    "taskId": null
+  },
+  "hyperlapse": {
+    "assetId": null,
+    "taskId": null
+  }
+}

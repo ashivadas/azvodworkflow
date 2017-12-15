@@ -1,0 +1,17 @@
+﻿{
+  "jobState": 2,
+  "isRunning": "False",
+  "isSuccessful": "True",
+  "errorText": "",
+  "startTime": "",
+  "endTime": "",
+  "runningDuration": "",
+  "extendedInfo": {
+    "mediaUnitNumber": 2,
+    "mediaUnitSize": "S2",
+    "otherJobsProcessing": 2,
+    "otherJobsScheduled": 1,
+    "otherJobsQueue": 1,
+    "amsRESTAPIEndpoint": "http://path/to/ams-REST-API-Endpoint"
+  }
+}
