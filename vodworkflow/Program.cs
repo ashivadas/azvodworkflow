@@ -90,9 +90,8 @@ namespace vodworkflow
         // Send a message to encode to MP4
         static public EncodeJobResponse EncodeToAdaptiveBitrateMP4Set(string assetId)
         {
-            // send a message to submit job 
-            // string url = "https://azmediafunctionsforlogicappwdahb73ofbb5k.azurewebsites.net/api/submit-job?code=J3mX1K4aWOMC6PXiTDkHY/BL1sxxgQy2IBJs0L9Vhs6Z158ucNjNpA==&clientId=default";
-            string url = "http://192.168.1.16:3000/submitjob/1";
+            // Send a message to submit job 
+            string url = $"{AzFunctionsHostBaseUrl}/submit-job";
 
             EncodeJobRequest request = new EncodeJobRequest()
             {
@@ -125,7 +124,7 @@ namespace vodworkflow
 
         public static CheckJobStatusResponse CheckJobStatus(string jobid)
         {
-            string url = "http://192.168.1.16:3000/submitjob/1";
+            string url = $"{AzFunctionsHostBaseUrl}/check-job-status";
 
             CheckJobStatusRequest request = new CheckJobStatusRequest
             {
