@@ -1,12 +1,10 @@
 using Microsoft.WindowsAzure.MediaServices.Client;
+using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
-using System.Threading;
 using System.Net;
-using Newtonsoft.Json;
 using System.Text;
 
 namespace vodworkflow
@@ -36,7 +34,7 @@ namespace vodworkflow
                 _context = new CloudMediaContext(new Uri(_RESTAPIEndpoint), tokenProvider);
 
                 IMediaProcessor processor = GetLatestMediaProcessorByName("Media Encoder Standard");
-                
+
 
                 // If you want to secure your high quality input media files with strong encryption at rest on disk,
                 // use AssetCreationOptions.StorageEncrypted instead of AssetCreationOptions.None.
@@ -58,7 +56,7 @@ namespace vodworkflow
                 {
                     chkJob = CheckJobStatus(encJob.JobId);
                 } while (chkJob.IsRunning.Equals("true"));
-       
+
             }
             catch (Exception exception)
             {
@@ -99,15 +97,19 @@ namespace vodworkflow
             // string url = "https://azmediafunctionsforlogicappwdahb73ofbb5k.azurewebsites.net/api/submit-job?code=J3mX1K4aWOMC6PXiTDkHY/BL1sxxgQy2IBJs0L9Vhs6Z158ucNjNpA==&clientId=default";
             string url = "http://192.168.1.16:3000/submitjob/1";
 
-            EncodeJobRequest ejob = new EncodeJobRequest() { AssetId = assetId, MesPreset = "Content Adaptive Multiple Bitrate MP4" };
-            string json = JsonConvert.SerializeObject(ejob);
-            HttpWebResponse response = MakeHttpRequest(url, json, "POST");
+            EncodeJobRequest request = new EncodeJobRequest()
+            {
+                AssetId = assetId,
+                MesPreset = "Content Adaptive Multiple Bitrate MP4"
+            };
 
-            EncodeJobResponse encJob = ReadEncodeJobResponse(response);
+            HttpWebResponse httpResponse = MakeHttpRequest(url, Utils.SerializeObject(request), "POST");
 
-            return encJob;
+            EncodeJobResponse response = ReadEncodeJobResponse(httpResponse);
+
+            return response;
         }
-        
+
         static public void AddSubtitletoAsset(string srtFile, IAsset asset)
         {
 
@@ -126,15 +128,18 @@ namespace vodworkflow
 
         public static CheckJobStatusResponse CheckJobStatus(string jobid)
         {
-            CheckJobStatusRequest job = new CheckJobStatusRequest { JobId = jobid, ExtendedInfo = true };
             string url = "http://192.168.1.16:3000/submitjob/1";
 
-            string json = JsonConvert.SerializeObject(job);
-            HttpWebResponse response = MakeHttpRequest(url, json, "POST");
-            CheckJobStatusResponse chkJob = ReadCheckJobResponse(response);
+            CheckJobStatusRequest request = new CheckJobStatusRequest
+            {
+                JobId = jobid,
+                ExtendedInfo = true
+            };
 
-            return chkJob;
+            HttpWebResponse httpResponse = MakeHttpRequest(url, Utils.SerializeObject(request), "POST");
+            CheckJobStatusResponse response = ReadCheckJobResponse(httpResponse);
 
+            return response;
         }
 
         public static HttpWebResponse MakeHttpRequest(string uri, string json, string verb)
@@ -160,11 +165,11 @@ namespace vodworkflow
 
 
             try
-            { 
+            {
                 HttpWebResponse objHttpWebResponse = (HttpWebResponse)objHttpWebRequest.GetResponse();
                 return objHttpWebResponse;
             }
-            catch(WebException exception)
+            catch (WebException exception)
             {
                 Console.Error.WriteLine(exception.Message);
             }
@@ -193,7 +198,7 @@ namespace vodworkflow
                     Console.Error.WriteLine(exception.Message);
                 }
             }
-  
+
             return encJob;
         }
 
@@ -205,59 +210,5 @@ namespace vodworkflow
             CheckJobStatusResponse chkJob = JsonConvert.DeserializeObject<CheckJobStatusResponse>(result);
             return chkJob;
         }
-
-        public static void TestJson()
-        {
-            string result = @"{
-    'jobId': 'nb:jid:UUID:19cab2ff-0300-80c0-da01-f1e7d467f6f9',
-    'otherJobsQueue': 1,
-    'mes': {
-                    'assetId': 'nb:cid:UUID:7346ded3-fdb5-4e97-b508-4e20b054d0b4',
-        'taskId': 'nb:tid:UUID:19cab2ff-0300-80c0-da02-f1e7d467f6f9'
-    },
-    'mepw': {
-                    'assetId': null,
-        'taskId': null
-    },
-    'indexV1': {
-                    'assetId': null,
-        'taskId': null,
-        'language': null
-    },
-    'indexV2': {
-                    'assetId': 'nb:cid:UUID:7205d19f-21da-4cb1-9dbb-47d251103d75',
-        'taskId': 'nb:tid:UUID:19cab2ff-0300-80c0-da03-f1e7d467f6f9',
-        'language': 'EnUs'
-    },
-    'ocr': {
-                    'assetId': null,
-        'taskId': null
-    },
-    'faceDetection': {
-                    'assetId': null,
-        'taskId': null
-    },
-    'faceRedaction': {
-                    'assetId': null,
-        'taskId': null
-    },
-    'motionDetection': {
-                    'assetId': null,
-        'taskId': null
-    },
-    'summarization': {
-                    'assetId': null,
-        'taskId': null
-    },
-    'hyperlapse': {
-                    'assetId': null,
-        'taskId': null
     }
-            }";
-
-            EncodeJobResponse encJob = JsonConvert.DeserializeObject<EncodeJobResponse>(result);
-        }
-    }
-
-
 }
