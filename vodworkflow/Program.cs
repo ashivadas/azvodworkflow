@@ -11,13 +11,13 @@ namespace vodworkflow
 {
     class Program
     {
+        private static readonly string MediaFiles = @"Media\BigBuckBunny.mp4";
+
         // Read values from the App.config file.
         static string _AADTenantDomain = ConfigurationManager.AppSettings["AMSAADTenantDomain"];
         static string _RESTAPIEndpoint = ConfigurationManager.AppSettings["AMSRESTAPIEndpoint"];
         static string _ClientID = ConfigurationManager.AppSettings["clientid"];
         static string _ClientSecret = ConfigurationManager.AppSettings["clientsecret"];
-
-        private static readonly string _mediaFiles = "C:\\dev\\go\\src\\thumbnails\\video-nginx\\html\\video\\bigbuck.mp4";
 
         // Field for service context.
         private static CloudMediaContext _context = null;
@@ -35,22 +35,23 @@ namespace vodworkflow
 
                 _context = new CloudMediaContext(new Uri(_RESTAPIEndpoint), tokenProvider);
 
-                // If you want to secure your high quality input media files with strong encryption at rest on disk,
-                // use AssetCreationOptions.StorageEncrypted instead of AssetCreationOptions.None.
+                // If you want to secure your high quality input media files with strong encryption 
+                // at rest on disk, use AssetCreationOptions.StorageEncrypted instead of 
+                // AssetCreationOptions.None.
 
-                Console.WriteLine("Upload a file.\n");
-                //IAsset inputAsset = UploadFile(_mediaFiles, AssetCreationOptions.None);
+                Console.WriteLine($"Uploading a file: {MediaFiles} \n");
+                IAsset inputAsset = UploadFile(MediaFiles, AssetCreationOptions.None);
 
-                // create adaptive bitrate set
-                string assetId = "nb:cid:UUID:59e2bc1d-1726-4645-bece-1b98faca5c8d";
-                EncodeJobResponse encJob = EncodeToAdaptiveBitrateMP4Set(assetId);
+                // Create adaptive bitrate set
+                EncodeJobResponse encJob = EncodeToAdaptiveBitrateMP4Set(inputAsset.Id);
 
-                // create associated .vtt file
+                // Create associated .vtt file
 
-                // uplaod text file to asset name
+                // Upload text file to asset name
 
-                // check status of encode
+                // Check status of encode
                 CheckJobStatusResponse chkJob;
+
                 do
                 {
                     chkJob = CheckJobStatus(encJob.JobId);
@@ -75,14 +76,10 @@ namespace vodworkflow
         {
             Console.WriteLine("Upload File: filename, options", fileName, OperationState.Succeeded);
 
-            //_context.Assets.Create("qelloinput", "qellofirst", options);
-            IAsset inputAsset = _context.Assets.CreateFromFile(
-                fileName,
-                options,
-                (af, p) =>
-                {
-                    Console.WriteLine("Uploading '{0}' - Progress: {1:0.##}%", af.Name, p.Progress);
-                });
+            IAsset inputAsset = _context.Assets.CreateFromFile(fileName, options, (af, p) =>
+            {
+                Console.WriteLine("Uploading '{0}' - Progress: {1:0.##}%", af.Name, p.Progress);
+            });
 
             Console.WriteLine("Asset {0} created.", inputAsset.Id);
 

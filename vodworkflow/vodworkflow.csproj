@@ -28,4 +28,9 @@
     <PackageReference Include="WindowsAzure.Storage" Version="8.5.0" />
     <PackageReference Include="Microsoft.IdentityModel.Protocol.Extensions" Version="1.0.4.403061554" />
   </ItemGroup>
+  <ItemGroup>
+    <None Update="Media\BigBuckBunny.mp4">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 </Project>
